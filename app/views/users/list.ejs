@@ -1,0 +1,371 @@
+<%- include('../layouts/application', { title: 'Employee Management' ,
+    subtitle: 'Manage all employees in your organization' , actionButtons: ` <a href="/users/create"
+    class="btn btn-primary">
+    <i class="fas fa-user-plus me-2"></i> Add Employee
+    </a>
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+        <i class="fas fa-file-import me-2"></i> Import
+    </button>
+    `,
+    css: 'datatable'
+    }) -%>
+
+    <style>
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .filter-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons .btn {
+            padding: 4px 8px;
+            font-size: 0.875rem;
+        }
+    </style>
+
+    <!-- Filters -->
+    <div class="filter-card">
+        <form action="/users/list" method="GET" id="filterForm">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Department</label>
+                    <select class="form-select" name="department" id="departmentFilter">
+                        <option value="">All Departments</option>
+                        <option value="IT" <%=query.department==='IT' ? 'selected' : '' %>>IT</option>
+                        <option value="HR" <%=query.department==='HR' ? 'selected' : '' %>>HR</option>
+                        <option value="Finance" <%=query.department==='Finance' ? 'selected' : '' %>>Finance</option>
+                        <option value="Sales" <%=query.department==='Sales' ? 'selected' : '' %>>Sales</option>
+                        <option value="Marketing" <%=query.department==='Marketing' ? 'selected' : '' %>>Marketing
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" name="role" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="employee" <%=query.role==='employee' ? 'selected' : '' %>>Employee</option>
+                        <option value="hr" <%=query.role==='hr' ? 'selected' : '' %>>HR</option>
+                        <option value="admin" <%=query.role==='admin' ? 'selected' : '' %>>Admin</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active" <%=query.status==='active' ? 'selected' : '' %>>Active</option>
+                        <option value="inactive" <%=query.status==='inactive' ? 'selected' : '' %>>Inactive</option>
+                        <option value="suspended" <%=query.status==='suspended' ? 'selected' : '' %>>Suspended</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Search</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search employees..."
+                            value="<%= query.search || '' %>">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter me-2"></i> Apply Filters
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="resetFilters">
+                        <i class="fas fa-redo me-2"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Contact</th>
+                            <th>Department</th>
+                            <th>Position</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Join Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (users && users.length> 0) { %>
+                            <% users.forEach(user=> { %>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <% if (user.profile_image) { %>
+                                                    <img src="<%= user.profile_image %>" alt="<%= user.first_name %>"
+                                                        class="user-avatar">
+                                                    <% } else { %>
+                                                        <div
+                                                            class="user-avatar bg-light text-dark d-flex align-items-center justify-content-center">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <% } %>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="mb-0">
+                                                    <%= user.first_name %>
+                                                        <%= user.last_name %>
+                                                </h6>
+                                                <small class="text-muted">ID: <%= user.employee_id || user.id %></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="small">
+                                            <div><i class="fas fa-envelope me-2"></i>
+                                                <%= user.email %>
+                                            </div>
+                                            <% if (user.phone) { %>
+                                                <div><i class="fas fa-phone me-2"></i>
+                                                    <%= user.phone %>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <%= user.department_name || 'N/A' %>
+                                    </td>
+                                    <td>
+                                        <%= user.position || 'N/A' %>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-<%= 
+                                        user.role === 'admin' ? 'danger' : 
+                                        user.role === 'hr' ? 'primary' : 'secondary' 
+                                    %>">
+                                            <%= user.role %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge bg-<%= 
+                                        user.status === 'active' ? 'success' : 
+                                        user.status === 'inactive' ? 'secondary' : 'warning' 
+                                    %>">
+                                            <%= user.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= new Date(user.hire_date).toLocaleDateString() %>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="/users/view/<%= user.id %>" class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="tooltip" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/users/edit/<%= user.id %>"
+                                                class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip"
+                                                title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <% if (user.role !=='admin' || (user.role==='admin' && user.id
+                                                !==currentUser.id)) { %>
+                                                <button type="button" class="btn btn-sm btn-outline-danger delete-user"
+                                                    data-user-id="<%= user.id %>"
+                                                    data-user-name="<%= user.first_name %> <%= user.last_name %>"
+                                                    data-bs-toggle="tooltip" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="8" class="text-center py-5">
+                                                <div class="text-muted">
+                                                    <i class="fas fa-users fa-3x mb-3"></i>
+                                                    <h5>No employees found</h5>
+                                                    <p class="mb-0">Try adjusting your filters or add a new employee.
+                                                    </p>
+                                                    <a href="/users/create" class="btn btn-primary mt-3">
+                                                        <i class="fas fa-user-plus me-2"></i> Add First Employee
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (totalPages> 1) { %>
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>&<%= queryString %>">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>&<%= queryString %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                            <% } %>
+
+                                <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                    <a class="page-link" href="?page=<%= currentPage + 1 %>&<%= queryString %>">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                    </ul>
+                </nav>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Employees</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Upload a CSV file with employee data. Download the <a href="/templates/employee-template.csv"
+                            class="text-decoration-none">template file</a> for reference.</p>
+
+                    <form action="/users/bulk-upload" method="POST" enctype="multipart/form-data" id="importForm">
+                        <div class="mb-3">
+                            <label for="csvFile" class="form-label">CSV File</label>
+                            <input type="file" class="form-control" id="csvFile" name="csvFile" accept=".csv" required>
+                            <div class="form-text">File must be in CSV format with proper column headers.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="importForm" class="btn btn-primary">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            $('#usersTable').DataTable({
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'All']],
+                order: [[0, 'asc']],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search employees..."
+                }
+            });
+
+            // Reset filters
+            $('#resetFilters').click(function () {
+                $('#filterForm')[0].reset();
+                window.location.href = '/users/list';
+            });
+
+            // Delete user confirmation
+            $('.delete-user').click(function () {
+                const userId = $(this).data('user-id');
+                const userName = $(this).data('user-name');
+
+                $('#confirmModalTitle').text('Delete Employee');
+                $('#confirmModalBody').html(`
+                <p>Are you sure you want to delete <strong>${userName}</strong>?</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    This action cannot be undone. All associated data will be permanently deleted.
+                </div>
+            `);
+
+                $('#confirmModalAction')
+                    .removeClass('btn-success')
+                    .addClass('btn-danger')
+                    .text('Delete')
+                    .off('click')
+                    .click(function () {
+                        $.ajax({
+                            url: `/api/users/${userId}`,
+                            method: 'DELETE',
+                            success: function (response) {
+                                if (response.success) {
+                                    $('#successModalMessage').text(response.message);
+                                    $('#successModal').modal('show');
+
+                                    // Reload page after 2 seconds
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    $('#errorModalMessage').text(response.message);
+                                    $('#errorModal').modal('show');
+                                }
+                            },
+                            error: function () {
+                                $('#errorModalMessage').text('Failed to delete employee. Please try again.');
+                                $('#errorModal').modal('show');
+                            }
+                        });
+
+                        $('#confirmModal').modal('hide');
+                    });
+
+                $('#confirmModal').modal('show');
+            });
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Export functionality
+            $('#exportBtn').click(function () {
+                const filters = {
+                    department: $('#departmentFilter').val(),
+                    role: $('#roleFilter').val(),
+                    status: $('#statusFilter').val(),
+                    search: $('input[name="search"]').val()
+                };
+
+                const queryString = Object.keys(filters)
+                    .filter(key => filters[key])
+                    .map(key => `${key}=${encodeURIComponent(filters[key])}`)
+                    .join('&');
+
+                window.location.href = `/api/users/export?${queryString}`;
+            });
+        });
+    </script>

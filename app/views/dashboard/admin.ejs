@@ -1,0 +1,366 @@
+
+   
+    <div class="row g-4 mb-4">
+        <!-- Statistics Cards -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-number">
+                        <%= stats.total_companies || 0 %>
+                    </div>
+                    <div class="stat-label">Total Companies</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up me-1"></i> 12% from last month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card revenue-card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-number">$<%= stats.monthly_revenue || '0' %>
+                    </div>
+                    <div class="stat-label">Monthly Revenue</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up me-1"></i> 8% from last month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card users-card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">
+                        <%= stats.total_users || 0 %>
+                    </div>
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up me-1"></i> 5% from last month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card activity-card">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">
+                        <%= stats.active_sessions || 0 %>
+                    </div>
+                    <div class="stat-label">Active Sessions</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down me-1"></i> 2% from yesterday
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+            <!-- Revenue Chart -->
+            <div class="card dashboard-card mb-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">Revenue Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Companies -->
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Companies</h5>
+                    <a href="/companies/list" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Company Name</th>
+                                    <th>Plan</th>
+                                    <th>Users</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (recentCompanies && recentCompanies.length> 0) { %>
+                                    <% recentCompanies.forEach(company=> { %>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center"
+                                                            style="width: 36px; height: 36px;">
+                                                            <i class="fas fa-building"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h6 class="mb-0">
+                                                            <%= company.company_name %>
+                                                        </h6>
+                                                        <small class="text-muted">
+                                                            <%= company.company_email %>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-<%= 
+                                                company.subscription_plan === 'premium' ? 'success' : 
+                                                company.subscription_plan === 'basic' ? 'primary' : 'secondary' 
+                                            %>">
+                                                    <%= company.subscription_plan || 'Free' %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <%= company.employee_count || 0 %>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="badge bg-<%= company.status === 'active' ? 'success' : 'danger' %>">
+                                                    <%= company.status %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <%= new Date(company.created_at).toLocaleDateString() %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-4">
+                                                        <div class="text-muted">
+                                                            <i class="fas fa-building fa-2x mb-3"></i>
+                                                            <p>No companies found</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card dashboard-card mb-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <a href="/companies/create" class="quick-action-btn">
+                                <i class="fas fa-plus quick-action-icon"></i>
+                                <span class="small">Add Company</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="/users/create" class="quick-action-btn">
+                                <i class="fas fa-user-plus quick-action-icon"></i>
+                                <span class="small">Add User</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="/reports" class="quick-action-btn">
+                                <i class="fas fa-chart-bar quick-action-icon"></i>
+                                <span class="small">Generate Report</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="/settings" class="quick-action-btn">
+                                <i class="fas fa-cog quick-action-icon"></i>
+                                <span class="small">Settings</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">Recent Activities</h5>
+                </div>
+                <div class="card-body">
+                    <% if (activities && activities.length> 0) { %>
+                        <% activities.forEach(activity=> { %>
+                            <div class="recent-activity-item">
+                                <div class="activity-icon bg-light text-primary">
+                                    <i class="fas fa-<%= 
+                                    activity.type === 'user' ? 'user' : 
+                                    activity.type === 'company' ? 'building' : 
+                                    activity.type === 'payment' ? 'credit-card' : 'bell' 
+                                %>"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6 class="mb-1">
+                                        <%= activity.description %>
+                                    </h6>
+                                    <p class="mb-0 small text-muted">
+                                        <%= activity.details %>
+                                    </p>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock me-1"></i>
+                                        <%= activity.time %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <div class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="fas fa-history fa-2x mb-3"></i>
+                                            <p>No recent activities</p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                </div>
+                <div class="card-footer bg-white border-0 text-center">
+                    <a href="/dashboard/activities" class="text-decoration-none small">View All Activities</a>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="card dashboard-card mt-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="card-title mb-0">System Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">Database</span>
+                            <span class="small text-success">✓ Operational</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">API Services</span>
+                            <span class="small text-success">✓ Operational</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">Email Service</span>
+                            <span class="small text-warning">⚠ Limited</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-warning" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">Storage</span>
+                            <span class="small text-danger">✗ Maintenance</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-danger" style="width: 40%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            const revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Quick stats update
+            function updateQuickStats() {
+                $.ajax({
+                    url: '/api/dashboard/stats',
+                    method: 'GET',
+                    success: function (data) {
+                        if (data.success) {
+                            // Update stats cards
+                            $('.stat-number').eq(0).text(data.stats.total_companies);
+                            $('.stat-number').eq(1).text('$' + data.stats.monthly_revenue);
+                            $('.stat-number').eq(2).text(data.stats.total_users);
+                            $('.stat-number').eq(3).text(data.stats.active_sessions);
+                        }
+                    }
+                });
+            }
+
+            // Update stats every 30 seconds
+            setInterval(updateQuickStats, 30000);
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>

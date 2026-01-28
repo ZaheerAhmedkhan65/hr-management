@@ -1,0 +1,501 @@
+<%- include('../layouts/application', { title: 'Add New Employee' , subtitle: 'Fill in employee details' , css: 'forms'
+    }) -%>
+
+    <style>
+        .form-section {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #667eea;
+        }
+
+        .profile-upload {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-upload:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .profile-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .salary-input .input-group-text {
+            background: #f8f9fa;
+        }
+    </style>
+
+    <div class="row">
+        <!-- Left Column - Form -->
+        <div class="col-lg-8">
+            <form action="/users" method="POST" enctype="multipart/form-data" id="createUserForm">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-user-circle"></i>
+                        Personal Information
+                    </h4>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">First Name *</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name"
+                                value="<%= old_input.first_name || '' %>" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name"
+                                value="<%= old_input.last_name || '' %>" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="<%= old_input.email || '' %>" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone"
+                                value="<%= old_input.phone || '' %>">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address"
+                            rows="2"><%= old_input.address || '' %></textarea>
+                    </div>
+                </div>
+
+                <!-- Employment Details -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-briefcase"></i>
+                        Employment Details
+                    </h4>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="employee_id" class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" id="employee_id" name="employee_id"
+                                value="<%= old_input.employee_id || '' %>" placeholder="Auto-generated if empty">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="position" class="form-label">Position/Title *</label>
+                            <input type="text" class="form-control" id="position" name="position"
+                                value="<%= old_input.position || '' %>" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="department_id" class="form-label">Department</label>
+                            <select class="form-select" id="department_id" name="department_id">
+                                <option value="">Select Department</option>
+                                <% if (departments && departments.length> 0) { %>
+                                    <% departments.forEach(dept=> { %>
+                                        <option value="<%= dept.id %>" <%=old_input.department_id==dept.id ? 'selected'
+                                            : '' %>>
+                                            <%= dept.department_name %>
+                                        </option>
+                                        <% }) %>
+                                            <% } %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="hire_date" class="form-label">Hire Date *</label>
+                            <input type="date" class="form-control" id="hire_date" name="hire_date"
+                                value="<%= old_input.hire_date || new Date().toISOString().split('T')[0] %>" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Role *</label>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="employee" <%=old_input.role==='employee' ? 'selected' : '' %>>Employee
+                                </option>
+                                <option value="hr" <%=old_input.role==='hr' ? 'selected' : '' %>>HR Manager</option>
+                                <% if (currentUser.role==='admin' ) { %>
+                                    <option value="admin" <%=old_input.role==='admin' ? 'selected' : '' %>>Administrator
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="status" class="form-label">Status *</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="active" <%=old_input.status==='active' ? 'selected' : '' %>>Active
+                                </option>
+                                <option value="inactive" <%=old_input.status==='inactive' ? 'selected' : '' %>>Inactive
+                                </option>
+                                <option value="suspended" <%=old_input.status==='suspended' ? 'selected' : '' %>
+                                    >Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salary Information -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Salary Information
+                    </h4>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="salary" class="form-label">Basic Salary *</label>
+                            <div class="input-group salary-input">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="salary" name="salary"
+                                    value="<%= old_input.salary || '' %>" step="0.01" min="0" required>
+                                <span class="input-group-text">per month</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="bonus" class="form-label">Bonus</label>
+                            <div class="input-group salary-input">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="bonus" name="bonus"
+                                    value="<%= old_input.bonus || '0' %>" step="0.01" min="0">
+                                <span class="input-group-text">per month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login Credentials -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-key"></i>
+                        Login Credentials
+                    </h4>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">
+                                Leave empty to generate random password. Employee will receive email with credentials.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirm_password">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div id="passwordMatch" class="form-text"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="send_welcome_email"
+                            name="send_welcome_email" checked>
+                        <label class="form-check-label" for="send_welcome_email">
+                            Send welcome email with login credentials
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Hidden file input for profile image -->
+                <input type="file" id="profile_image_input" name="profile_image" accept="image/*"
+                    style="display: none;">
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/users/list" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Create Employee
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column - Profile Upload -->
+        <div class="col-lg-4">
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-camera"></i>
+                    Profile Picture
+                </h4>
+
+                <div class="profile-upload" id="profileUploadArea">
+                    <div id="profilePreview">
+                        <div class="profile-preview-placeholder">
+                            <i class="fas fa-user fa-4x text-muted mb-3"></i>
+                            <h5>Upload Profile Picture</h5>
+                            <p class="text-muted small">Click to upload or drag and drop</p>
+                            <p class="text-muted small">PNG, JPG up to 5MB</p>
+                        </div>
+                    </div>
+                    <input type="hidden" id="profile_image_data" name="profile_image_data">
+                </div>
+
+                <div class="mt-3">
+                    <button type="button" class="btn btn-outline-danger btn-sm w-100" id="removeProfile">
+                        <i class="fas fa-trash me-2"></i> Remove Picture
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Tips -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Tips
+                </h4>
+
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>Required Fields</h6>
+                    <p class="mb-2 small">Fields marked with * are required.</p>
+                </div>
+
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Password Security</h6>
+                    <p class="mb-0 small">If you don't set a password, a random one will be generated and emailed to the
+                        employee.</p>
+                </div>
+
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle me-2"></i>Email Notification</h6>
+                    <p class="mb-0 small">Employee will receive welcome email with login instructions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Password visibility toggle
+            $('#togglePassword').click(function () {
+                const input = $('#password');
+                const type = input.attr('type') === 'password' ? 'text' : 'password';
+                input.attr('type', type);
+                $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+            });
+
+            $('#toggleConfirmPassword').click(function () {
+                const input = $('#confirm_password');
+                const type = input.attr('type') === 'password' ? 'text' : 'password';
+                input.attr('type', type);
+                $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+            });
+
+            // Password confirmation check
+            $('#confirm_password').on('keyup', function () {
+                const password = $('#password').val();
+                const confirm = $(this).val();
+                const matchDiv = $('#passwordMatch');
+
+                if (password && confirm) {
+                    if (password === confirm) {
+                        matchDiv.html('<i class="fas fa-check-circle text-success"></i> Passwords match');
+                        matchDiv.removeClass('text-danger').addClass('text-success');
+                    } else {
+                        matchDiv.html('<i class="fas fa-times-circle text-danger"></i> Passwords do not match');
+                        matchDiv.removeClass('text-success').addClass('text-danger');
+                    }
+                } else {
+                    matchDiv.html('');
+                }
+            });
+
+            // Profile image upload
+            const profileUploadArea = $('#profileUploadArea');
+            const profileImageInput = $('#profile_image_input');
+            const profilePreview = $('#profilePreview');
+            const removeProfileBtn = $('#removeProfile');
+
+            // Click to upload
+            profileUploadArea.click(function () {
+                profileImageInput.click();
+            });
+
+            // Drag and drop
+            profileUploadArea.on('dragover', function (e) {
+                e.preventDefault();
+                profileUploadArea.css('border-color', '#667eea');
+                profileUploadArea.css('background', '#f0f2ff');
+            });
+
+            profileUploadArea.on('dragleave', function (e) {
+                e.preventDefault();
+                profileUploadArea.css('border-color', '#dee2e6');
+                profileUploadArea.css('background', '#f8f9fa');
+            });
+
+            profileUploadArea.on('drop', function (e) {
+                e.preventDefault();
+                profileUploadArea.css('border-color', '#dee2e6');
+                profileUploadArea.css('background', '#f8f9fa');
+
+                const files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    handleProfileImage(files[0]);
+                }
+            });
+
+            // File input change
+            profileImageInput.change(function (e) {
+                if (this.files && this.files[0]) {
+                    handleProfileImage(this.files[0]);
+                }
+            });
+
+            // Handle profile image
+            function handleProfileImage(file) {
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file');
+                    return;
+                }
+
+                // Check file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profilePreview.html(`
+                    <img src="${e.target.result}" alt="Profile Preview" class="profile-preview">
+                    <p class="text-muted small mt-2">${file.name}</p>
+                `);
+                    removeProfileBtn.show();
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Remove profile image
+            removeProfileBtn.click(function () {
+                profilePreview.html(`
+                <div class="profile-preview-placeholder">
+                    <i class="fas fa-user fa-4x text-muted mb-3"></i>
+                    <h5>Upload Profile Picture</h5>
+                    <p class="text-muted small">Click to upload or drag and drop</p>
+                    <p class="text-muted small">PNG, JPG up to 5MB</p>
+                </div>
+            `);
+                profileImageInput.val('');
+                $(this).hide();
+            });
+
+            // Form validation
+            $('#createUserForm').submit(function (e) {
+                e.preventDefault();
+
+                // Basic validation
+                const requiredFields = ['first_name', 'last_name', 'email', 'position', 'salary', 'hire_date'];
+                let valid = true;
+                let errorMessage = '';
+
+                requiredFields.forEach(field => {
+                    const value = $(`#${field}`).val().trim();
+                    if (!value) {
+                        valid = false;
+                        errorMessage = 'Please fill in all required fields';
+                        $(`#${field}`).addClass('is-invalid');
+                    } else {
+                        $(`#${field}`).removeClass('is-invalid');
+                    }
+                });
+
+                // Email validation
+                const email = $('#email').val();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailRegex.test(email)) {
+                    valid = false;
+                    errorMessage = 'Please enter a valid email address';
+                    $('#email').addClass('is-invalid');
+                }
+
+                // Password validation if provided
+                const password = $('#password').val();
+                const confirmPassword = $('#confirm_password').val();
+
+                if (password && password.length < 6) {
+                    valid = false;
+                    errorMessage = 'Password must be at least 6 characters long';
+                    $('#password').addClass('is-invalid');
+                }
+
+                if (password && password !== confirmPassword) {
+                    valid = false;
+                    errorMessage = 'Passwords do not match';
+                    $('#confirm_password').addClass('is-invalid');
+                }
+
+                if (!valid) {
+                    $('#errorModalMessage').text(errorMessage);
+                    $('#errorModal').modal('show');
+                    return false;
+                }
+
+                // Show loading
+                $('#loadingModal').modal('show');
+
+                // Submit form
+                this.submit();
+            });
+
+            // Initialize date picker
+            $('#hire_date').attr('max', new Date().toISOString().split('T')[0]);
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>

@@ -1,0 +1,120 @@
+<%- include('../layouts/application', { title: 'Server Error' , noNavbar: true, noFooter: true,
+    containerClass: 'container' }) -%>
+
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .error-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .error-icon {
+            font-size: 5rem;
+            color: #dc3545;
+            margin-bottom: 30px;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 800;
+            color: #2c3e50;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .error-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .btn-error {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-error-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-error-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+
+    <div class="error-page">
+        <div class="error-card">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+
+            <div class="error-code">500</div>
+            <h1 class="error-title">Server Error</h1>
+
+            <p class="error-message">
+                <%= message
+                    || 'Something went wrong on our end. Our team has been notified and is working to fix the issue.' %>
+            </p>
+
+            <% if (error && process.env.NODE_ENV==='development' ) { %>
+                <div class="error-details">
+                    <strong>Error Details:</strong><br>
+                    <%= error.message %><br>
+                        <%= error.stack %>
+                </div>
+                <% } %>
+
+                    <div class="error-actions">
+                        <a href="/" class="btn btn-error btn-error-primary">
+                            <i class="fas fa-home me-2"></i> Go to Homepage
+                        </a>
+                        <a href="javascript:location.reload()" class="btn btn-outline-secondary btn-error">
+                            <i class="fas fa-redo me-2"></i> Refresh Page
+                        </a>
+                    </div>
+
+                    <div class="mt-5">
+                        <p class="text-muted small mb-2">Still having issues?</p>
+                        <a href="/contact" class="text-decoration-none">Contact Support</a>
+                        <span class="mx-2">•</span>
+                        <a href="/status" class="text-decoration-none">Check System Status</a>
+                    </div>
+        </div>
+    </div>

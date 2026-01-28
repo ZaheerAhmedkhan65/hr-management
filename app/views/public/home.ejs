@@ -1,0 +1,450 @@
+
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            height: 100%;
+            padding: 30px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 80px 0;
+            border-radius: 20px;
+            margin: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="display-4 fw-bold mb-4">Streamline Your HR Processes</h1>
+                    <p class="lead mb-5 opacity-75">
+                        A comprehensive HR management system that handles attendance, leaves, expenses,
+                        salaries, and more. Perfect for businesses of all sizes.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="/auth/register" class="btn btn-light btn-lg px-5 py-3">
+                            <i class="fas fa-rocket me-2"></i> Get Started Free
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="fas fa-play-circle me-2"></i> Watch Demo
+                        </a>
+                    </div>
+                    <div class="mt-5">
+                        <p class="mb-2 opacity-75">Trusted by 500+ companies worldwide</p>
+                        <div class="d-flex flex-wrap gap-4 align-items-center">
+                            <span class="opacity-50">Google</span>
+                            <span class="opacity-50">Microsoft</span>
+                            <span class="opacity-50">Amazon</span>
+                            <span class="opacity-50">Apple</span>
+                            <span class="opacity-50">Facebook</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <img src="/images/dashboard-preview.png" alt="Dashboard Preview"
+                            class="img-fluid rounded-3 shadow-lg">
+                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary opacity-10 rounded-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-md-3">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Users</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Everything You Need in One Platform</h2>
+                <p class="lead text-muted">Comprehensive features designed to simplify HR management</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <h4 class="mb-3">Attendance Management</h4>
+                        <p class="text-muted mb-0">
+                            Track employee attendance with clock in/out, geo-fencing, and real-time monitoring.
+                            Generate detailed attendance reports.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4 class="mb-3">Leave Management</h4>
+                        <p class="text-muted mb-0">
+                            Streamline leave requests with automated approval workflows,
+                            balance tracking, and calendar integration.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-info bg-opacity-10 text-info">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h4 class="mb-3">Expense Management</h4>
+                        <p class="text-muted mb-0">
+                            Submit, track, and approve expenses with receipt upload,
+                            categorization, and budget monitoring.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-warning bg-opacity-10 text-warning">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <h4 class="mb-3">Payroll & Salary</h4>
+                        <p class="text-muted mb-0">
+                            Automated salary processing with tax calculations,
+                            bonuses, deductions, and payslip generation.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-danger bg-opacity-10 text-danger">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h4 class="mb-3">Analytics & Reporting</h4>
+                        <p class="text-muted mb-0">
+                            Powerful analytics dashboard with customizable reports
+                            and real-time insights for data-driven decisions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-purple bg-opacity-10 text-purple">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4 class="mb-3">Mobile App</h4>
+                        <p class="text-muted mb-0">
+                            Access all features on the go with our iOS and Android apps.
+                            Check in, apply leaves, and more from your phone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold mb-3">Ready to Transform Your HR Management?</h2>
+                    <p class="lead mb-4 opacity-75">
+                        Join thousands of companies who have streamlined their HR processes with our platform.
+                        Start your free trial today - no credit card required.
+                    </p>
+                    <a href="/auth/register" class="btn btn-light btn-lg px-5">
+                        <i class="fas fa-play-circle me-2"></i> Start Free Trial
+                    </a>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="bg-white rounded-3 p-4 d-inline-block">
+                        <div class="display-6 fw-bold text-primary mb-2">14-Day</div>
+                        <div class="h5 text-muted mb-0">Free Trial</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">What Our Customers Say</h2>
+                <p class="lead text-muted">Trusted by HR professionals worldwide</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="/images/testimonial1.jpg" alt="Sarah Johnson" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Sarah Johnson</h5>
+                                <p class="text-muted mb-0">HR Director, TechCorp</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">
+                            "This platform has revolutionized how we manage our HR processes.
+                            The attendance tracking alone has saved us 20 hours per week!"
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="/images/testimonial2.jpg" alt="Michael Chen" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Michael Chen</h5>
+                                <p class="text-muted mb-0">CEO, StartupXYZ</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">
+                            "As a growing startup, we needed an affordable yet powerful HR solution.
+                            This system exceeded our expectations in every way."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="/images/testimonial3.jpg" alt="Emma Wilson" class="testimonial-avatar me-3">
+                            <div>
+                                <h5 class="mb-0">Emma Wilson</h5>
+                                <p class="text-muted mb-0">HR Manager, RetailCo</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">
+                            "The mobile app is a game-changer for our field employees.
+                            They can now clock in from anywhere, and we get real-time data."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+                <p class="lead text-muted">Find answers to common questions</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq1">
+                                    Is there a free trial available?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, we offer a 14-day free trial for all new customers. No credit card is required
+                                    to start your trial.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq2">
+                                    Can I import existing employee data?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Absolutely! We provide CSV templates and bulk import functionality to easily migrate
+                                    your existing employee data.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq3">
+                                    Is the system compliant with labor laws?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, our system is designed to be compliant with major labor laws and regulations.
+                                    We also provide country-specific configurations.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq4">
+                                    Do you offer training and support?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, we provide comprehensive documentation, video tutorials, and 24/7 customer
+                                    support via chat, email, and phone.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function (event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    const hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top - 80
+                    }, 800);
+                }
+            });
+
+            // Animate stats
+            function animateStats() {
+                $('.stat-number').each(function () {
+                    const $this = $(this);
+                    const countTo = $this.text().replace(/[^0-9]/g, '');
+
+                    $({ countNum: 0 }).animate({
+                        countNum: countTo
+                    }, {
+                        duration: 2000,
+                        easing: 'swing',
+                        step: function () {
+                            $this.text(Math.floor(this.countNum) + '+');
+                        }
+                    });
+                });
+            }
+
+            // Trigger animation when stats are in viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(document.querySelector('.bg-light'));
+        });
+    </script>
